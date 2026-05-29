@@ -16,9 +16,17 @@ ln -sf ~/repos/pi-config/global/extensions ~/.pi/agent/extensions
 ln -sf ~/repos/pi-config/global/skills ~/.pi/agent/skills
 
 # 4. Project configs (as needed)
-ln -sf ~/repos/pi-config/projects/<project>/settings.json <project>/.pi/settings.json
-ln -sf ~/repos/pi-config/projects/<project>/skills <project>/.pi/skills
-ln -sf ~/repos/pi-config/projects/<project>/AGENTS.md <project>/AGENTS.md
+PROJECT=~/path/to/your-project
+NAME=my-project
+
+# Copy existing config into the repo first (if not starting from template)
+[ -f $PROJECT/.pi/settings.json ] && cp $PROJECT/.pi/settings.json ~/repos/pi-config/projects/$NAME/
+[ -f $PROJECT/AGENTS.md ] && cp $PROJECT/AGENTS.md ~/repos/pi-config/projects/$NAME/
+
+# Then symlink
+ln -sf ~/repos/pi-config/projects/$NAME/settings.json $PROJECT/.pi/settings.json
+ln -sf ~/repos/pi-config/projects/$NAME/skills $PROJECT/.pi/skills
+ln -sf ~/repos/pi-config/projects/$NAME/AGENTS.md $PROJECT/AGENTS.md
 ```
 
 ## Structure
@@ -30,7 +38,7 @@ ln -sf ~/repos/pi-config/projects/<project>/AGENTS.md <project>/AGENTS.md
 │   ├── extensions/
 │   └── skills/
 └── projects/                  # Project-specific pi config
-    └── <project-name>/
+    └── my-project/              # Example
         ├── AGENTS.md
         ├── settings.json
         └── skills/
