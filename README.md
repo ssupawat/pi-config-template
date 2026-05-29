@@ -69,3 +69,25 @@ ln -sf ~/repos/pi-config/global/AGENTS.md ~/.pi/agent/AGENTS.md
 ```
 
 Pi reads/writes `~/.pi/agent/AGENTS.md` → follows the symlink → reads/writes the repo. The symlink is invisible to pi — no special behavior needed.
+
+### Extension development
+
+`tsconfig.json` and `package.json` live at the repo root — not in `~/.pi/agent/`. This is intentional:
+
+- Without `tsconfig.json` — editor can't resolve types or know which files to include
+- Without `package.json` listing `@earendil-works/pi-coding-agent` — editor can't resolve imports
+
+Open the repo root (not `~/.pi/`) in your editor to get IntelliSense, linting, and type checking for extensions.
+
+Example extension (`global/extensions/sound-on-done.ts`):
+
+```typescript
+import { execFile } from "node:child_process";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+
+export default function (pi: ExtensionAPI) {
+  pi.on("agent_end", async () => {
+    execFile("afplay", ["/System/Library/Sounds/Glass.aiff"]);
+  });
+}
+```
